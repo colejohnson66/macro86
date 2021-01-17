@@ -1,0 +1,6 @@
+{
+    "files.insertFinalNewline": true,
+    "python.linting.pylintArgs": [
+        "--contextmanager-decorators=contextlib.contextmanager,nmigen.hdl.dsl._guardedcontextmanager"
+    ]
+}
