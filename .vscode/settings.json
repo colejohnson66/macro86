@@ -1,6 +1,14 @@
 {
+    "cSpell.words": [
+        "elaboratable",
+        "nmigen",
+        "pylint"
+    ],
     "files.insertFinalNewline": true,
+    "python.linting.enabled": true,
     "python.linting.pylintArgs": [
         "--contextmanager-decorators=contextlib.contextmanager,nmigen.hdl.dsl._guardedcontextmanager"
-    ]
+    ],
+    "python.linting.pylintEnabled": true,
+    "python.pythonPath": "/usr/bin/python"
 }
