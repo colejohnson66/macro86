@@ -2,6 +2,7 @@
 A static RAM modeled after the likes of the 62xx ICs
 https://en.wikipedia.org/wiki/6264
 https://www.cs.uml.edu/~fredm/courses/91.305/files/cy6264.pdf
+(`/datasheets/cy6264.pdf`)
 """
 
 # pylint error is for snake_case, but also covers short names
@@ -22,11 +23,11 @@ class SRam(Elaboratable):
     https://www.cs.uml.edu/~fredm/courses/91.305/files/cy6264.pdf
 
     Attributes:
-        addr: The address to be read from or written to
-        data_in: The input data
-        data_out: The output data
-        _oe: Output enable (active low)
-        _we: Write enable (active low)
+        addr:      The address to be read from or written to
+        data_in:   The input data
+        data_out:  The output data
+        _oe:       Output enable (active low)
+        _we:       Write enable (active low)
         data_bits: The width of the data bus in bits
         addr_bits: The width of the address bus in bits
     """
@@ -49,7 +50,7 @@ class SRam(Elaboratable):
         """
         assert data_bits > 0
         assert addr_bits > 0
-        assert addr_bits <= 16  # Is this needed?
+        assert addr_bits <= 32
 
         self.addr = Signal(addr_bits)
         self.data_in = Signal(data_bits)
@@ -101,8 +102,9 @@ class SRam(Elaboratable):
 
         # Simulates "Write Cycle No. 1 (~WE Controlled)" (p. 4)
         # Simulates "Read Cycle No. 2" (p. 4)
-        def simulate():
+        def process():
             yield mem._oe.eq(1)
+
             # Write at address 0
             yield mem.addr.eq(0)
             yield mem.data_in.eq(0x1111)
@@ -110,6 +112,7 @@ class SRam(Elaboratable):
             yield Delay(1e-6)
             yield mem._we.eq(1)
             yield Delay(1e-6)
+
             # Write at address 1
             yield mem.addr.eq(1)
             yield mem.data_in.eq(0x2222)
@@ -117,20 +120,23 @@ class SRam(Elaboratable):
             yield Delay(1e-6)
             yield mem._we.eq(1)
             yield Delay(1e-6)
+
             # Stop inputing data
             yield mem.data_in.eq(0)
+
             # Read back address 0
             yield mem.addr.eq(0)
             yield mem._oe.eq(0)
             yield Delay(1e-6)
-            read0 = yield mem.data_out
-            want0 = yield mem.__mem[0]
-            if read0 != want0:
-                print(f"ERROR: data_out({read0}) != mem[0]({want0})")
-            if read0 != 0x1111:
-                print(f"ERROR: data_out({read0}) != 0x1111")
+            # read0 = yield mem.data_out
+            # want0 = yield mem.__mem[0]
+            # if read0 != want0:
+            #     print(f"ERROR: data_out({read0}) != mem[0]({want0})")
+            # if read0 != 0x1111:
+            #     print(f"ERROR: data_out({read0}) != 0x1111")
             yield mem._oe.eq(1)
             yield Delay(1e-6)
+
             # Read back address 1
             yield mem.addr.eq(1)
             yield mem._oe.eq(0)
@@ -144,9 +150,9 @@ class SRam(Elaboratable):
             yield mem._oe.eq(1)
             yield Delay(1e-6)
 
-        sim.add_process(simulate)
-        with sim.write_vcd("sram.vcd"):
-            sim.run_until(10e-6)
+        sim.add_process(process)
+        with sim.write_vcd("sram.vcd", "sram.gtkw", traces=mem.ports()):
+            sim.run()
 
     @classmethod
     def formal(cls) -> Tuple[Module, List[Signal]]:
