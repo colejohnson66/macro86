@@ -1,6 +1,7 @@
 """
 A transparent latch similar to one of a 74x373
 https://assets.nexperia.com/documents/data-sheet/74HC_HCT373.pdf
+(`/datasheets/74HC_HCT373.pdf`)
 """
 
 # pylint error is for snake_case, but also covers short names
@@ -21,12 +22,12 @@ class TransparentLatch(Elaboratable):
     https://assets.nexperia.com/documents/data-sheet/74HC_HCT373.pdf
 
     Attributes:
-        d: The input data
-        q: The output data
-        le: Latch enable (requires `_oe == 1`)
-            0: `q := Past(q)`
+        d:    The input data
+        q:    The output data
+        le:   Latch enable (requires `_oe == 1`)
+            0: `q := Past(d)` (output the internal register)
             1: `q := d`
-        _oe: Output enable (active low)
+        _oe:  Output enable (active low)
             0: `q` is unchanged from what `le` does
             1: `q := 0` (overriding `le`)
         bits: The width of this latch in bits
@@ -69,9 +70,45 @@ class TransparentLatch(Elaboratable):
 
         return m
 
+    def ports(self):
+        """Gets the ports for a `TransparentLatch`"""
+        return [
+            self.d,
+            self.q,
+            self.le,
+            self._oe
+        ]
+
     @classmethod
     def sim(cls):
-        assert False
+        """Simulate a 74x373 transparent latch of 16 bits"""
+        m = Module()
+        m.submodules.latch = latch = TransparentLatch(16)
+
+        sim = Simulator(m)
+
+        def process():
+            yield latch._oe.eq(1)
+
+            # Write in data twice
+            yield latch.le.eq(1)
+            yield Delay(1e-6)
+            yield latch.d.eq(0x1234)
+            yield Delay(1e-6)
+            yield latch.d.eq(0x5678)
+            yield Delay(1e-6)
+            yield latch.le.eq(0)
+            yield Delay(1e-6)
+            yield latch.d.eq(0x1234)
+            yield Delay(1e-6)
+            yield latch.le.eq(1)
+            yield Delay(1e-6)
+            yield latch._oe.eq(0)
+            yield Delay(1e-6)
+
+        sim.add_process(process)
+        with sim.write_vcd("transparent_latch.vcd", "transparent_latch.gtkw", traces=latch.ports()):
+            sim.run()
 
     @classmethod
     def formal(cls) -> Tuple[Module, List[Signal]]:
