@@ -8,11 +8,10 @@ https://assets.nexperia.com/documents/data-sheet/74HC_HCT373.pdf
 # pylint: disable=C0103
 
 from typing import List, Tuple
-from nmigen import Signal, Module, Elaboratable, ClockDomain
-from nmigen import Mux
+from nmigen import Array, ClockDomain, Elaboratable, Module, Mux, Signal
 from nmigen.build import Platform
 from nmigen.sim import Simulator, Delay
-from nmigen.asserts import Assert, Cover, Fell, Past
+from nmigen.asserts import Assert, Assume, Cover, Fell, Past, Rose, Stable
 from util import main
 
 
