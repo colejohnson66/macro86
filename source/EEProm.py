@@ -147,7 +147,7 @@ class EEProm(Elaboratable):
             yield Delay(1e-6)
 
         sim.add_process(process)
-        with sim.write_vcd("eeprom.vcd", "eeprom.gtkw", traces=rom.ports()):
+        with sim.write_vcd("out/EEProm.vcd", "out/EEProm.gtkw", traces=rom.ports()):
             sim.run()
 
     @classmethod
@@ -156,4 +156,4 @@ class EEProm(Elaboratable):
 
 
 if __name__ == "__main__":
-    main(EEProm, "eeprom.il")
+    main(EEProm, "out/EEProm.il")

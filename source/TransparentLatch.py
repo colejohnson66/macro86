@@ -105,7 +105,7 @@ class TransparentLatch(Elaboratable):
             yield Delay(1e-6)
 
         sim.add_process(process)
-        with sim.write_vcd("transparent_latch.vcd", "transparent_latch.gtkw", traces=latch.ports()):
+        with sim.write_vcd("out/TransparentLatch.vcd", "out/TransparentLatch.gtkw", traces=latch.ports()):
             sim.run()
 
     @classmethod
@@ -114,4 +114,4 @@ class TransparentLatch(Elaboratable):
 
 
 if __name__ == "__main__":
-    main(TransparentLatch, "transparent_latch.il")
+    main(TransparentLatch, "out/TransparentLatch.il")

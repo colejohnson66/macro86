@@ -150,7 +150,7 @@ class SRam(Elaboratable):
             yield Delay(1e-6)
 
         sim.add_process(process)
-        with sim.write_vcd("sram.vcd", "sram.gtkw", traces=mem.ports()):
+        with sim.write_vcd("out/SRam.vcd", "out/SRam.gtkw", traces=mem.ports()):
             sim.run()
 
     @classmethod
@@ -159,4 +159,4 @@ class SRam(Elaboratable):
 
 
 if __name__ == "__main__":
-    main(SRam, "sram.il")
+    main(SRam, "out/SRam.il")

@@ -1,0 +1,5 @@
+# This file exists to ensure that this directory exists when running the code above
+
+# Ignore everything (except this)
+*
+!.gitignore

@@ -3,9 +3,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# RTLIL files
-*.il
-
 # Verification
 *-bmc
 *_bmc
@@ -13,8 +10,3 @@ __pycache__/
 *_probe
 *-cover
 *_cover
-*.gtkw
-
-# Gtkwave
-*.vcd
-*.gtkw
