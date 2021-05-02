@@ -110,7 +110,25 @@ class TransparentLatch(Elaboratable):
 
     @classmethod
     def formal(cls) -> Tuple[Module, List[Signal]]:
-        assert False
+        """Formal verification of a `TransparentLatch` of 16 bits"""
+        m = Module()
+        m.submodules.latch = latch = TransparentLatch(16)
+
+        m.d.sync += Cover((latch.q == 0x1234)
+                          & (latch.le == 0)
+                          & (Past(latch.q, 2) == 0x5678)
+                          & (Past(latch.le, 2) == 0))
+
+        with m.If(latch._oe == 1):
+            m.d.comb += Assert(latch.q == 0)
+
+        with m.If((latch._oe == 0) & (latch.le == 1)):
+            m.d.comb += Assert(latch.d == latch.q)
+
+        with m.If((latch._oe == 0) & (Fell(latch.le))):
+            m.d.sync += Assert(latch.q == Past(latch.d))
+
+        return m, latch.ports()
 
 
 if __name__ == "__main__":
