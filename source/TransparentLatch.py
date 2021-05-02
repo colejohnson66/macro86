@@ -79,7 +79,7 @@ class TransparentLatch(Elaboratable):
 
     @classmethod
     def sim(cls):
-        """Simulate a 74x373 transparent latch of 16 bits"""
+        """Simulate a `TransparentLatch` of 16 bits"""
         m = Module()
         m.submodules.latch = latch = TransparentLatch(16)
 
@@ -110,7 +110,7 @@ class TransparentLatch(Elaboratable):
 
     @classmethod
     def formal(cls) -> Tuple[Module, List[Signal]]:
-        """Formal verification of a `TransparentLatch` of 16 bits"""
+        """Formally verify a `TransparentLatch` of 16 bits"""
         m = Module()
         m.submodules.latch = latch = TransparentLatch(16)
 

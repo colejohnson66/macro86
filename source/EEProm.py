@@ -90,7 +90,7 @@ class EEProm(Elaboratable):
 
     @classmethod
     def sim(cls):
-        """Simulate a 4x16bit `EEProm`"""
+        """Simulate an `EEProm` with a 4 bit address and 16 bit data bus"""
         m = Module()
         m.submodules.rom = rom = EEProm(16, 4)
 
@@ -152,7 +152,13 @@ class EEProm(Elaboratable):
 
     @classmethod
     def formal(cls) -> Tuple[Module, List[Signal]]:
-        assert False
+        """Formally verify an `EEProm` with a 4 bit address and 16 bit data bus"""
+        m = Module()
+        m.submodules.rom = rom = EEProm(16, 4)
+
+        # TODO: Formally verify
+
+        return m, rom.ports()
 
 
 if __name__ == "__main__":

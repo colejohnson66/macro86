@@ -93,7 +93,7 @@ class SRam(Elaboratable):
 
     @classmethod
     def sim(cls):
-        """Simulate a 4x16bit `SRam`"""
+        """Simulate an `SRam` with a 4 bit address and 16 bit data bus"""
         m = Module()
         m.submodules.mem = mem = SRam(16, 4)
 
@@ -155,7 +155,13 @@ class SRam(Elaboratable):
 
     @classmethod
     def formal(cls) -> Tuple[Module, List[Signal]]:
-        assert False
+        """Formally verify an `SRam` with a 4 bit address and 16 bit data bus"""
+        m = Module()
+        m.submodules.rom = rom = EEProm(16, 4)
+
+        # TODO: Formally verify
+
+        return m, rom.ports()
 
 
 if __name__ == "__main__":
