@@ -1,4 +1,7 @@
-# This file exists to ensure that this directory exists when running the code above
+# When running nMigen, attempting to reference (through creating) a file in a non-
+#   existing directory, a `FileNotFoundError` results.
+# This file exists to ensure that this directory is "created" during cloning the
+#   repository instead of having to be done manually.
 
 # Ignore everything (except this)
 *
