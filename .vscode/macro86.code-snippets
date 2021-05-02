@@ -30,7 +30,6 @@
       "",
       "from typing import List, Tuple",
       "from nmigen import Array, ClockDomain, Elaboratable, Module, Mux, Signal",
-      "from nmigen import Mux",
       "from nmigen.build import Platform",
       "from nmigen.sim import Simulator, Delay",
       "from nmigen.asserts import Assert, Assume, Cover, Fell, Past, Rose, Stable",
