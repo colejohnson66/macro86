@@ -23,13 +23,12 @@ class SRam(Elaboratable):
     https://www.cs.uml.edu/~fredm/courses/91.305/files/cy6264.pdf
 
     Attributes:
-        addr:      The address to be read from or written to
-        data_in:   The input data
-        data_out:  The output data
-        _oe:       Output enable (active low)
-        _we:       Write enable (active low)
-        data_bits: The width of the data bus in bits
-        addr_bits: The width of the address bus in bits
+        [I] addr:     The address lines
+        [I] data_in:  The input data
+        [O] data_out: The output data
+        [I] _oe:      Output enable (active low)
+        [I] _we:      Write enable (active low)
+            /: `__mem[a] := data_in`
     """
     addr: Signal
     data_in: Signal
@@ -96,7 +95,7 @@ class SRam(Elaboratable):
     def sim(cls):
         """Simulate a 4x16bit `SRam`"""
         m = Module()
-        m.submodules.mem = mem = SRam(16, 2)
+        m.submodules.mem = mem = SRam(16, 4)
 
         sim = Simulator(m)
 
@@ -141,12 +140,12 @@ class SRam(Elaboratable):
             yield mem.addr.eq(1)
             yield mem._oe.eq(0)
             yield Delay(1e-6)
-            read1 = yield mem.data_out
-            want1 = yield mem.__mem[1]
-            if read1 != want1:
-                print(f"ERROR: data_out({read0}) != mem[1]({want0})")
-            if read1 != 0x2222:
-                print(f"ERROR: data_out({read0}) != 0x2222")
+            # read1 = yield mem.data_out
+            # want1 = yield mem.__mem[1]
+            # if read1 != want1:
+            #     print(f"ERROR: data_out({read0}) != mem[1]({want0})")
+            # if read1 != 0x2222:
+            #     print(f"ERROR: data_out({read0}) != 0x2222")
             yield mem._oe.eq(1)
             yield Delay(1e-6)
 

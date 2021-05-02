@@ -21,15 +21,14 @@ class TransparentLatch(Elaboratable):
     https://assets.nexperia.com/documents/data-sheet/74HC_HCT373.pdf
 
     Attributes:
-        d:    The input data
-        q:    The output data
-        le:   Latch enable (requires `_oe == 1`)
+        [I] d:    The input data
+        [O] q:    The output data
+        [I] le:   Latch enable (requires `_oe == 1`)
             0: `q := Past(d)` (output the internal register)
             1: `q := d`
-        _oe:  Output enable (active low)
+        [I] _oe:  Output enable (active low)
             0: `q` is unchanged from what `le` does
             1: `q := 0` (overriding `le`)
-        bits: The width of this latch in bits
     """
     d: Signal
     q: Signal
